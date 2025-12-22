@@ -1,0 +1,74 @@
+.main {
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.brandWhite {
+  color: white;
+}
+
+.brandGradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-dim);
+}
+
+.error {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-sm);
+  color: #ffcccc;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.results {
+  margin-top: 3rem;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
