@@ -16,5 +16,6 @@ Aplicación web interactiva para analizar estadísticas de canales de YouTube, i
 ## Stack Tecnológico
 - **Framework:** Next.js (App Router).
 - **Estilos:** Vanilla CSS (CSS Modules + Variables Globales).
-- **API:** YouTube Data API v3.
+- **API:** YouTube Data API v3 + YouTube Analytics API.
+- **Auth:** NextAuth.js (Google Provider).
 - **Persistencia:** LocalStorage (para el Tracker).

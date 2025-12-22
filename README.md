@@ -15,7 +15,11 @@ Aplicación interactiva para optimizar canales de YouTube mediante análisis de 
 ## Instalación
 1.  Clonar el repositorio.
 2.  Instalar dependencias: `npm install`.
-3.  Configurar `.env` con `NEXT_PUBLIC_YOUTUBE_API_KEY`.
+3.  Configurar `.env.local` con:
+    - `NEXT_PUBLIC_YOUTUBE_API_KEY`
+    - `GOOGLE_CLIENT_ID`
+    - `GOOGLE_CLIENT_SECRET`
+    - `NEXTAUTH_SECRET`
 
 ## Ejecución
 ```bash

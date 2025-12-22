@@ -15,3 +15,8 @@ Todas las actualizaciones notables de este proyecto se documentarán en este arc
 - **UI/UX:** Diseño premium con CSS Modules, tema oscuro y animaciones.
 - **Tracker:** Sistema de seguimiento de sugerencias con persistencia local.
 - **Dashboard:** Visualización de estadísticas clave y puntos de acción.
+
+### Actualizado - 2025-12-22
+- **OAuth 2.0:** Autenticación segura con Google para acceder a datos privados.
+- **Analytics Privados:** Integración con YouTube Analytics API (Fuentes de tráfico, Demografía, Retención).
+- **Dashboard Privado:** Sección exclusiva para propietarios de canales.
