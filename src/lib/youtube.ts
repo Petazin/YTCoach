@@ -60,10 +60,19 @@ export interface VideoSnippet {
   categoryId: string;
 }
 
+export interface VideoContentDetails {
+  duration: string;
+  dimension: string;
+  definition: string;
+  caption: string;
+  licensedContent: boolean;
+}
+
 export interface VideoData {
   id: string;
   snippet: VideoSnippet;
   statistics: VideoStatistics;
+  contentDetails: VideoContentDetails;
 }
 
 export class YouTubeError extends Error {
@@ -138,9 +147,9 @@ export async function getRecentVideos(playlistId: string, maxResults: number = 1
 
   const videoIds = playlistData.items.map((item: any) => item.contentDetails.videoId).join(',');
 
-  // 2. Get video statistics
+  // 2. Get video statistics AND content details (for duration)
   const videosData = await fetchFromYouTube<{ items?: any[] }>('videos', {
-    part: 'snippet,statistics',
+    part: 'snippet,statistics,contentDetails',
     id: videoIds,
   });
 
@@ -152,5 +161,6 @@ export async function getRecentVideos(playlistId: string, maxResults: number = 1
     id: item.id,
     snippet: item.snippet,
     statistics: item.statistics,
+    contentDetails: item.contentDetails,
   }));
 }

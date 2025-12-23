@@ -114,6 +114,59 @@ function mapTrafficSources(rows: any[]): { source: string; views: number }[] {
     }));
 }
 
+
+export interface VideoAnalytics {
+    videoId: string;
+    views: number;
+    estimatedMinutesWatched: number;
+    averageViewDuration: number;
+    annotationClickThroughRate: number; // For detailed CTR
+    likes: number; // Needed if public API quota is concern, but usually public is better.
+    comments: number;
+}
+
+export async function getVideoSpecificAnalytics(accessToken: string, videoId: string): Promise<VideoAnalytics | null> {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = '2000-01-01'; // Lifetime
+
+    const url = new URL(`${ANALYTICS_BASE_URL}/reports`);
+    url.searchParams.append('ids', `channel==MINE`);
+    url.searchParams.append('filters', `video==${videoId}`);
+    url.searchParams.append('startDate', startDate);
+    url.searchParams.append('endDate', endDate);
+    url.searchParams.append('metrics', 'views,estimatedMinutesWatched,averageViewDuration,annotationClickThroughRate,likes,comments');
+
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+    };
+
+    try {
+        const res = await fetch(url.toString(), { headers });
+        if (!res.ok) {
+            console.error('Video Analytics Error', await res.text());
+            return null;
+        }
+
+        const json = await res.json();
+        if (!json.rows || json.rows.length === 0) return null;
+
+        const row = json.rows[0];
+        return {
+            videoId,
+            views: row[0],
+            estimatedMinutesWatched: row[1],
+            averageViewDuration: row[2],
+            annotationClickThroughRate: row[3], // Note: Main CTR is often hidden in 'impressions' metrics which are channel-level with filters
+            likes: row[4],
+            comments: row[5]
+        };
+    } catch (error) {
+        console.error('Error fetching video analytics:', error);
+        return null;
+    }
+}
+
 function formatTrafficSource(source: string): string {
     const map: Record<string, string> = {
         'NO_LINK_OTHER': 'Directo / Desconocido',

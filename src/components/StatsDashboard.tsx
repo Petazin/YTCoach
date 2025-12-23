@@ -1,8 +1,11 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { ChannelData, VideoData } from '@/lib/youtube';
 import { AnalysisResult } from '@/lib/analysis';
 import { useTracker } from '@/hooks/useTracker';
+import { generateAdvancedInsights, Insight, classifyContent } from '@/lib/insightEngine'; // Import engine
+import AlgorithmicMatrix from './AlgorithmicMatrix';
 import styles from './StatsDashboard.module.css';
 
 interface Props {
@@ -13,6 +16,14 @@ interface Props {
 
 export default function StatsDashboard({ channel, analysis, videos }: Props) {
     const { trackAction, trackedActions, getImpact, isLoaded } = useTracker();
+    const [activeTab, setActiveTab] = useState<'all' | 'video' | 'short'>('all');
+
+    const insights = useMemo(() => generateAdvancedInsights(videos), [videos]);
+
+    const displayInsights = useMemo(() => {
+        if (activeTab === 'all') return insights;
+        return insights.filter(i => i.contentType === activeTab);
+    }, [insights, activeTab]);
 
     const formatNumber = (num: string) => {
         return new Intl.NumberFormat('es-MX', { notation: 'compact' }).format(parseInt(num));
@@ -51,6 +62,60 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
                 </div>
             </div>
 
+            {/* NEW: Strategic Insights Hub */}
+            <div className={styles.section}>
+                <h2 className={styles.sectionTitle}>🎯 Estrategia & Insights (Beta)</h2>
+
+                {/* Tabs */}
+                <div className={styles.tabContainer}>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'all' ? styles.activeTab : ''}`}
+                        onClick={() => setActiveTab('all')}
+                    >
+                        Todo
+                    </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'video' ? styles.activeTab : ''}`}
+                        onClick={() => setActiveTab('video')}
+                    >
+                        Videos Largos
+                    </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'short' ? styles.activeTab : ''}`}
+                        onClick={() => setActiveTab('short')}
+                    >
+                        Shorts
+                    </button>
+                </div>
+
+                <div className={styles.insightsGrid}>
+                    {displayInsights.length > 0 ? (
+                        displayInsights.map((insight, idx) => (
+                            <div key={idx} className={`${styles.insightCard} ${styles[`priority${insight.priority}`]}`}>
+                                <div className={styles.insightType}>
+                                    <span style={{ opacity: 0.7 }}>{insight.contentType.toUpperCase()}</span>
+                                    <span>{insight.priority === 'high' ? '🔥 Crítico' : '💡 Oportunidad'}</span>
+                                </div>
+                                <h3 className={styles.insightTitle}>{insight.title}</h3>
+                                <p className={styles.insightDesc}>{insight.description}</p>
+                                {insight.metric && (
+                                    <div className={styles.insightMetric}>
+                                        📊 {insight.metric}
+                                    </div>
+                                )}
+                                <div className={styles.insightSuggestion}>
+                                    <strong>Consejo:</strong> {insight.suggestion}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-8 text-gray-500">
+                            No se encontraron insights específicos para esta categoría hoy. ¡Sigue subiendo contenido!
+                        </div>
+                    )}
+                </div>
+            </div>
+
             {/* Analysis Section */}
             <div className={styles.section}>
                 <h2 className={styles.sectionTitle}>Análisis de Rendimiento</h2>
@@ -81,6 +146,13 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
                     </div>
                 </div>
             </div>
+
+            {/* Algorithmic Matrix (Deep Dive) */}
+            <AlgorithmicMatrix videos={
+                activeTab === 'all'
+                    ? videos
+                    : videos.filter(v => classifyContent(v) === activeTab)
+            } />
 
             {/* Action Points */}
             <div className={styles.section}>

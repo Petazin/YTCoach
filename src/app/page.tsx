@@ -63,11 +63,7 @@ export default function Home() {
 
       <SearchBar onSearch={handleSearch} isLoading={loading} />
 
-      {/* DEBUG: Remove later */}
-      <div className="text-xs text-center text-gray-500 mt-2">
-        Status: {session ? `Logueado como ${session.user?.email}` : 'No Logueado'} |
-        Token: {(session as any)?.user?.accessToken ? '✅ Presente' : '❌ Falta'}
-      </div>
+
 
       {error && (
         <div className={styles.error}>

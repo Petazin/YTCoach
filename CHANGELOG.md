@@ -20,3 +20,5 @@ Todas las actualizaciones notables de este proyecto se documentarán en este arc
 - **OAuth 2.0:** Autenticación segura con Google para acceder a datos privados.
 - **Analytics Privados:** Integración con YouTube Analytics API (Fuentes de tráfico, Demografía, Retención).
 - **Dashboard Privado:** Sección exclusiva para propietarios de canales.
+- **Insights Avanzados:** Segmentación por Videos, Shorts y Lives con recomendaciones estratégicas.
+- **Matriz Algorítmica:** Análisis profundo de métricas clave (Velocidad, Retención Real, Engagement Ratio).

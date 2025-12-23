@@ -4,8 +4,8 @@
 Aplicación web interactiva para analizar estadísticas de canales de YouTube, identificar puntos fuertes/débiles, sugerir mejoras accionables y rastrear su impacto.
 
 ## Estado Actual
-- **Versión:** 1.0.0 (MVP Completo)
-- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto.
+- **Versión:** 1.2.0 (Analytics Avanzados & Algorítmicos)
+- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto, Dashboard Privado, Matriz de Algortimo.
 
 ## Reglas del Usuario (Memoria)
 - Comunicación en español.

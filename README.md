@@ -6,6 +6,8 @@ Aplicación interactiva para optimizar canales de YouTube mediante análisis de 
 - **Análisis de Canal:** Identifica fortalezas y debilidades usando la API de YouTube.
 - **Puntos de Acción:** Genera consejos específicos para mejorar el rendimiento.
 - **Seguimiento de Impacto:** Registra mejoras implementadas y visualiza su efecto en las estadísticas.
+- **Deep Analytics:** Matriz algorítmica con métricas ocultas (Velocidad, Retención Relativa).
+- **Segmentación:** Estrategias diferenciadas para Shorts, Videos y Lives.
 - **Diseño Premium:** Interfaz moderna y dinámica.
 
 ## Requisitos
