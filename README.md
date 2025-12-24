@@ -8,7 +8,8 @@ Aplicación interactiva para optimizar canales de YouTube mediante análisis de 
 - **Seguimiento de Impacto:** Registra mejoras implementadas y visualiza su efecto en las estadísticas.
 - **Deep Analytics:** Matriz algorítmica con métricas ocultas (Velocidad, Retención Relativa).
 - **Segmentación:** Estrategias diferenciadas para Shorts, Videos y Lives.
-- **Diseño Premium:** Interfaz moderna y dinámica.
+- **Visual Intelligence:** Gráficos rediseñados para una lectura instantánea de patrones algorítmicos.
+- **Diseño Premium v1.4:** Interfaz "Cyber-Dark" con micro-animaciones y tipografía optimizada (Outfit/Inter).
 
 ## Requisitos
 - Node.js

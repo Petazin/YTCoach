@@ -22,9 +22,13 @@ export default function PrivateDashboard({ channelId }: Props) {
             try {
                 const stats = await getPrivateChannelStats((session as any).user.accessToken, channelId);
                 setData(stats);
-            } catch (err) {
-                console.error(err);
-                setError('No se pudieron cargar los datos privados. Asegúrate de que el canal logueado es el mismo que estás analizando.');
+            } catch (err: any) {
+                if (err.message === 'UNAUTHENTICATED') {
+                    setError('Sesión expirada. Por favor recarga la página.');
+                } else {
+                    console.error(err);
+                    setError('No se pudieron cargar los datos privados.');
+                }
             } finally {
                 setLoading(false);
             }
@@ -33,7 +37,25 @@ export default function PrivateDashboard({ channelId }: Props) {
         loadData();
     }, [session, channelId]);
 
-    if (loading) return <div className="text-center py-8">Cargando datos de YouTube Studio...</div>;
+    if (loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <div className="skeleton" style={{ width: '200px', height: '32px' }}></div>
+                </div>
+                <div className={styles.grid}>
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className={styles.card}>
+                            <div className="skeleton" style={{ width: '120px', height: '20px', marginBottom: '1.5rem' }}></div>
+                            <div className="skeleton" style={{ width: '100%', height: '16px', marginBottom: '1rem' }}></div>
+                            <div className="skeleton" style={{ width: '100%', height: '16px', marginBottom: '1rem' }}></div>
+                            <div className="skeleton" style={{ width: '80%', height: '16px' }}></div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
     if (error) {
         return (
             <div className="text-center py-4 text-red-400 bg-red-900/20 rounded-lg my-4">

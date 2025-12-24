@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -29,13 +30,15 @@ export default function SearchBar({ onSearch, isLoading }: SearchBarProps) {
                     className={styles.input}
                     disabled={isLoading}
                 />
-                <button
+                <Button
                     type="submit"
                     disabled={isLoading}
+                    isLoading={isLoading}
+                    variant="primary"
                     className={styles.button}
                 >
-                    {isLoading ? '...' : 'Analizar'}
-                </button>
+                    Analizar
+                </Button>
             </form>
             <div className={styles.glow}></div>
             <p className={styles.hint}>

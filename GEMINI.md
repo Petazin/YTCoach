@@ -4,8 +4,8 @@
 Aplicación web interactiva para analizar estadísticas de canales de YouTube, identificar puntos fuertes/débiles, sugerir mejoras accionables y rastrear su impacto.
 
 ## Estado Actual
-- **Versión:** 1.2.0 (Analytics Avanzados & Algorítmicos)
-- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto, Dashboard Privado, Matriz de Algortimo.
+- **Versión:** 1.3.0 (AI Analyst & Stability)
+- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto, Dashboard Privado, Matriz de Algortimo (UI v1.4), **Analista AI Conversacional (Versus Mode)**, **Sistema de Diseño v1.4 (Cyber-Dark UI, Animaciones, Skeletons)**.
 
 ## Reglas del Usuario (Memoria)
 - Comunicación en español.
@@ -16,6 +16,7 @@ Aplicación web interactiva para analizar estadísticas de canales de YouTube, i
 ## Stack Tecnológico
 - **Framework:** Next.js (App Router).
 - **Estilos:** Vanilla CSS (CSS Modules + Variables Globales).
-- **API:** YouTube Data API v3 + YouTube Analytics API.
+- **API:** YouTube Data API v3 + YouTube Analytics API + **Google Gemini API**.
 - **Auth:** NextAuth.js (Google Provider).
 - **Persistencia:** LocalStorage (para el Tracker).
+- **Modelos AI:** Soporte dinámico para `gemini-1.5-flash`, `gemini-1.5-pro`, `gemini-2.0-flash-exp`.

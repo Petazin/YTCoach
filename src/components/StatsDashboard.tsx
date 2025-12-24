@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
 import { ChannelData, VideoData } from '@/lib/youtube';
 import { AnalysisResult } from '@/lib/analysis';
 import { useTracker } from '@/hooks/useTracker';
 import { generateAdvancedInsights, Insight, classifyContent } from '@/lib/insightEngine'; // Import engine
 import AlgorithmicMatrix from './AlgorithmicMatrix';
+import ComparisonMode from './ComparisonMode';
 import styles from './StatsDashboard.module.css';
 
 interface Props {
@@ -15,13 +17,14 @@ interface Props {
 }
 
 export default function StatsDashboard({ channel, analysis, videos }: Props) {
+    const { data: session } = useSession();
     const { trackAction, trackedActions, getImpact, isLoaded } = useTracker();
-    const [activeTab, setActiveTab] = useState<'all' | 'video' | 'short'>('all');
+    const [activeTab, setActiveTab] = useState<'all' | 'video' | 'short' | 'versus'>('all');
 
     const insights = useMemo(() => generateAdvancedInsights(videos), [videos]);
 
     const displayInsights = useMemo(() => {
-        if (activeTab === 'all') return insights;
+        if (activeTab === 'all' || activeTab === 'versus') return insights;
         return insights.filter(i => i.contentType === activeTab);
     }, [insights, activeTab]);
 
@@ -86,73 +89,91 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
                     >
                         Shorts
                     </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'versus' ? styles.activeTab : ''} ${styles.versusTab || ''}`} // Assuming you might add a specific style for versus tab, or just reuse tab
+                        onClick={() => setActiveTab('versus')}
+                        style={activeTab === 'versus' ? { borderColor: '#ff4d4d', color: '#ff4d4d' } : {}}
+                    >
+                        ⚔️ Versus Mode
+                    </button>
                 </div>
 
-                <div className={styles.insightsGrid}>
-                    {displayInsights.length > 0 ? (
-                        displayInsights.map((insight, idx) => (
-                            <div key={idx} className={`${styles.insightCard} ${styles[`priority${insight.priority}`]}`}>
-                                <div className={styles.insightType}>
-                                    <span style={{ opacity: 0.7 }}>{insight.contentType.toUpperCase()}</span>
-                                    <span>{insight.priority === 'high' ? '🔥 Crítico' : '💡 Oportunidad'}</span>
-                                </div>
-                                <h3 className={styles.insightTitle}>{insight.title}</h3>
-                                <p className={styles.insightDesc}>{insight.description}</p>
-                                {insight.metric && (
-                                    <div className={styles.insightMetric}>
-                                        📊 {insight.metric}
+                {activeTab === 'versus' ? (
+                    <ComparisonMode
+                        videos={videos}
+                        accessToken={(session as any)?.user?.accessToken}
+                    />
+                ) : (
+                    <div className={styles.insightsGrid}>
+                        {displayInsights.length > 0 ? (
+                            displayInsights.map((insight, idx) => (
+                                <div key={idx} className={`${styles.insightCard} ${styles[`priority${insight.priority}`]}`}>
+                                    <div className={styles.insightType}>
+                                        <span style={{ opacity: 0.7 }}>{insight.contentType.toUpperCase()}</span>
+                                        <span>{insight.priority === 'high' ? '🔥 Crítico' : '💡 Oportunidad'}</span>
                                     </div>
-                                )}
-                                <div className={styles.insightSuggestion}>
-                                    <strong>Consejo:</strong> {insight.suggestion}
+                                    <h3 className={styles.insightTitle}>{insight.title}</h3>
+                                    <p className={styles.insightDesc}>{insight.description}</p>
+                                    {insight.metric && (
+                                        <div className={styles.insightMetric}>
+                                            📊 {insight.metric}
+                                        </div>
+                                    )}
+                                    <div className={styles.insightSuggestion}>
+                                        <strong>Consejo:</strong> {insight.suggestion}
+                                    </div>
                                 </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-8 text-gray-500">
+                                No se encontraron insights específicos para esta categoría hoy. ¡Sigue subiendo contenido!
                             </div>
-                        ))
-                    ) : (
-                        <div className="col-span-full text-center py-8 text-gray-500">
-                            No se encontraron insights específicos para esta categoría hoy. ¡Sigue subiendo contenido!
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* Analysis Section - Only show when NOT in versus mode to avoid clutter? Or keep it? keeping it for now */}
+            {activeTab !== 'versus' && (
+                <>
+                    <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>Análisis de Rendimiento</h2>
+                        <div className={styles.analysisGrid}>
+                            <div className={styles.listBox}>
+                                <h3 className={`${styles.listHeader} ${styles.strengthsHeader}`}>
+                                    <span>🚀</span> Puntos Fuertes
+                                </h3>
+                                <ul className={styles.list}>
+                                    {analysis.strengths.length > 0 ? (
+                                        analysis.strengths.map((s, i) => <li key={i} className={styles.listItem}>{s}</li>)
+                                    ) : (
+                                        <li className={styles.listItem}>No se detectaron fortalezas claras.</li>
+                                    )}
+                                </ul>
+                            </div>
+                            <div className={styles.listBox}>
+                                <h3 className={`${styles.listHeader} ${styles.weaknessesHeader}`}>
+                                    <span>⚠️</span> Áreas de Mejora
+                                </h3>
+                                <ul className={styles.list}>
+                                    {analysis.weaknesses.length > 0 ? (
+                                        analysis.weaknesses.map((w, i) => <li key={i} className={styles.listItem}>{w}</li>)
+                                    ) : (
+                                        <li className={styles.listItem}>¡Excelente trabajo! No hay debilidades críticas.</li>
+                                    )}
+                                </ul>
+                            </div>
                         </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Analysis Section */}
-            <div className={styles.section}>
-                <h2 className={styles.sectionTitle}>Análisis de Rendimiento</h2>
-                <div className={styles.analysisGrid}>
-                    <div className={styles.listBox}>
-                        <h3 className={`${styles.listHeader} ${styles.strengthsHeader}`}>
-                            <span>🚀</span> Puntos Fuertes
-                        </h3>
-                        <ul className={styles.list}>
-                            {analysis.strengths.length > 0 ? (
-                                analysis.strengths.map((s, i) => <li key={i} className={styles.listItem}>{s}</li>)
-                            ) : (
-                                <li className={styles.listItem}>No se detectaron fortalezas claras.</li>
-                            )}
-                        </ul>
                     </div>
-                    <div className={styles.listBox}>
-                        <h3 className={`${styles.listHeader} ${styles.weaknessesHeader}`}>
-                            <span>⚠️</span> Áreas de Mejora
-                        </h3>
-                        <ul className={styles.list}>
-                            {analysis.weaknesses.length > 0 ? (
-                                analysis.weaknesses.map((w, i) => <li key={i} className={styles.listItem}>{w}</li>)
-                            ) : (
-                                <li className={styles.listItem}>¡Excelente trabajo! No hay debilidades críticas.</li>
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            {/* Algorithmic Matrix (Deep Dive) */}
-            <AlgorithmicMatrix videos={
-                activeTab === 'all'
-                    ? videos
-                    : videos.filter(v => classifyContent(v) === activeTab)
-            } />
+                    {/* Algorithmic Matrix (Deep Dive) */}
+                    <AlgorithmicMatrix videos={
+                        activeTab === 'all'
+                            ? videos
+                            : videos.filter(v => classifyContent(v) === activeTab as any)
+                    } />
+                </>
+            )}
 
             {/* Action Points */}
             <div className={styles.section}>

@@ -7,6 +7,7 @@ export interface DailyMetric {
     estimatedMinutesWatched: number;
     averageViewDuration: number;
     subscribersGained: number;
+    annotationClickThroughRate: number;
 }
 
 export interface Demographics {
@@ -30,7 +31,7 @@ export async function getPrivateChannelStats(accessToken: string, channelId: str
     dailyUrl.searchParams.append('ids', `channel==MINE`);
     dailyUrl.searchParams.append('startDate', startDate);
     dailyUrl.searchParams.append('endDate', endDate);
-    dailyUrl.searchParams.append('metrics', 'views,estimatedMinutesWatched,averageViewDuration,subscribersGained');
+    dailyUrl.searchParams.append('metrics', 'views,estimatedMinutesWatched,averageViewDuration,subscribersGained,annotationClickThroughRate');
     dailyUrl.searchParams.append('dimensions', 'day');
     dailyUrl.searchParams.append('sort', 'day');
 
@@ -66,6 +67,11 @@ export async function getPrivateChannelStats(accessToken: string, channelId: str
         ]);
 
         if (!dailyRes.ok || !demoRes.ok || !trafficRes.ok) {
+            if (dailyRes.status === 401 || demoRes.status === 401 || trafficRes.status === 401) {
+                // Token expired
+                throw new Error('UNAUTHENTICATED');
+            }
+
             const dailyErr = !dailyRes.ok ? await dailyRes.text() : null;
             const demoErr = !demoRes.ok ? await demoRes.text() : null;
             const trafficErr = !trafficRes.ok ? await trafficRes.text() : null;
@@ -83,8 +89,11 @@ export async function getPrivateChannelStats(accessToken: string, channelId: str
             demographics: mapDemographics(demoJson.rows || []),
             topSources: mapTrafficSources(trafficJson.rows || [])
         };
-    } catch (error) {
-        console.error('Error in getPrivateChannelStats:', error);
+    } catch (error: any) {
+        const msg = error?.message || String(error);
+        if (!msg.includes('UNAUTHENTICATED')) {
+            console.error('Error in getPrivateChannelStats:', error);
+        }
         throw error;
     }
 }
@@ -96,6 +105,7 @@ function mapDailyMetrics(rows: any[]): DailyMetric[] {
         estimatedMinutesWatched: row[2],
         averageViewDuration: row[3],
         subscribersGained: row[4],
+        annotationClickThroughRate: row[5] || 0,
     }));
 }
 
@@ -144,6 +154,9 @@ export async function getVideoSpecificAnalytics(accessToken: string, videoId: st
     try {
         const res = await fetch(url.toString(), { headers });
         if (!res.ok) {
+            if (res.status === 401) {
+                throw new Error('UNAUTHENTICATED');
+            }
             console.error('Video Analytics Error', await res.text());
             return null;
         }
@@ -161,9 +174,13 @@ export async function getVideoSpecificAnalytics(accessToken: string, videoId: st
             likes: row[4],
             comments: row[5]
         };
-    } catch (error) {
-        console.error('Error fetching video analytics:', error);
-        return null;
+    } catch (error: any) {
+        // Suppress logging for auth errors as they are handled by UI
+        const msg = error?.message || String(error);
+        if (!msg.includes('UNAUTHENTICATED')) {
+            console.error('Error fetching video analytics:', error);
+        }
+        throw error;
     }
 }
 

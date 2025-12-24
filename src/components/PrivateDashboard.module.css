@@ -1,19 +1,20 @@
 .container {
-    margin-top: 4rem;
-    padding: 2rem;
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg);
     background: rgba(66, 133, 244, 0.05);
     /* Google Blue Tint */
     border: 1px solid rgba(66, 133, 244, 0.2);
     border-radius: var(--radius-md);
     position: relative;
     overflow: hidden;
+    animation: scaleIn 0.5s var(--transition-normal);
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 .title {
@@ -23,6 +24,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    font-family: var(--font-heading);
 }
 
 .titleIcon {
@@ -32,21 +34,29 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    gap: var(--spacing-lg);
 }
 
 .card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
     border-radius: var(--radius-sm);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.card:hover {
+    border-color: #4285F4;
+    /* Keep Google Blue for this private dash? or switch to primary? Let's keep blue for context */
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(66, 133, 244, 0.1);
 }
 
 .cardTitle {
     font-size: 0.9rem;
     color: var(--color-text-dim);
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
     font-weight: 600;
     letter-spacing: 0.5px;
 }
@@ -71,6 +81,8 @@
 .metricValue {
     font-weight: 700;
     color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
 }
 
 .barContainer {
@@ -89,14 +101,16 @@
     flex: 1;
     height: 8px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+    border-radius: var(--radius-full);
     overflow: hidden;
 }
 
 .barFill {
     height: 100%;
     background: var(--color-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-full);
+    transition: width 1s ease-out;
+    /* Smooth fill animation */
 }
 
 .barValue {
@@ -116,4 +130,5 @@
     color: rgba(255, 255, 255, 0.02);
     z-index: 0;
     pointer-events: none;
+    font-family: var(--font-heading);
 }

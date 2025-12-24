@@ -20,6 +20,7 @@ export default function AlgorithmicMatrix({ videos }: Props) {
     const { data: session } = useSession();
     const [rows, setRows] = useState<RowData[]>([]);
     const [loading, setLoading] = useState(false);
+    const [authError, setAuthError] = useState(false);
 
     useEffect(() => {
         if (!session?.user || videos.length === 0) return;
@@ -32,17 +33,25 @@ export default function AlgorithmicMatrix({ videos }: Props) {
             const videosToAnalyze = videos.slice(0, 5);
 
             for (const video of videosToAnalyze) {
-                const analytics = await getVideoSpecificAnalytics(
-                    (session as any).user.accessToken,
-                    video.id
-                );
+                try {
+                    const analytics = await getVideoSpecificAnalytics(
+                        (session as any).user.accessToken,
+                        video.id
+                    );
 
-                let metrics = null;
-                if (analytics) {
-                    metrics = calculateAlgorithmicMetrics(video, analytics);
+                    let metrics = null;
+                    if (analytics) {
+                        metrics = calculateAlgorithmicMetrics(video, analytics);
+                    }
+
+                    newRows.push({ video, metrics });
+                } catch (err: any) {
+                    if (err.message === 'UNAUTHENTICATED') {
+                        setAuthError(true);
+                        break; // Stop fetching to avoid spamming errors
+                    }
+                    console.error(err);
                 }
-
-                newRows.push({ video, metrics });
             }
 
             setRows(newRows);
@@ -57,6 +66,12 @@ export default function AlgorithmicMatrix({ videos }: Props) {
     return (
         <div className={styles.container}>
             <h2 className={styles.title}>🧬 Matriz de Decodificación Algorítmica</h2>
+
+            {authError && (
+                <div className="bg-red-900/50 border border-red-500 text-red-200 p-3 rounded mb-4 text-center text-xs">
+                    ⚠️ Sesión expirada. Recarga la página.
+                </div>
+            )}
 
             {loading ? (
                 <div className={styles.loading}>Analizando métricas profundas...</div>

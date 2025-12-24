@@ -63,6 +63,27 @@ export default function Home() {
 
       <SearchBar onSearch={handleSearch} isLoading={loading} />
 
+      {loading && !data && (
+        <div className={styles.results} style={{ opacity: 0.7 }}>
+          {/* Header Skeleton */}
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div className="skeleton" style={{ width: '100px', height: '100px', borderRadius: '50%', margin: '0 auto 1rem' }}></div>
+            <div className="skeleton" style={{ width: '300px', height: '40px', margin: '0 auto 0.5rem' }}></div>
+            <div className="skeleton" style={{ width: '200px', height: '20px', margin: '0 auto' }}></div>
+          </div>
+
+          {/* Stats Grid Skeleton */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} style={{ padding: '2rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+                <div className="skeleton" style={{ width: '60%', height: '40px', margin: '0 auto 1rem' }}></div>
+                <div className="skeleton" style={{ width: '40%', height: '16px', margin: '0 auto' }}></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
 
 
       {error && (

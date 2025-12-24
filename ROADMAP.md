@@ -40,13 +40,18 @@ Este documento rastrea el progreso del proyecto, desde su concepción hasta los 
     - [ ] Definir **Paleta de Colores Corporativa** (Principal, Secundario, Acentos semánticos para métricas).
     - [ ] Estandarizar **Tipografía** (Familia tipográfica moderna, pesos y jerarquías claras).
     - [ ] Crear biblioteca de componentes reutilizables (Botones, Tarjetas, Inputs) con estilos unificados.
-- [ ] **Experiencia Interactiva:**
-    - [ ] Implementar **Micro-animaciones** (Hover effects, transiciones suaves al cargar datos, feedback visual).
-    - [ ] Mejorar la estructura del layout (Grid system, espaciado consistente).
-- [ ] **Visual Intelligence (Gráficos):**
-    - [ ] Rediseñar gráficos existentes para que sean coherentes con la nueva identidad.
+- [ ] **Optimización y SEO:**
+    - [ ] Implementar Metadata dinámica para cada canal analizado (`generateMetadata`).
+    - [ ] Mejorar tiempos de carga (Lazy loading de componentes pesados).
+- [ ] **Mejora de Auth:**
+    - [ ] Implementar rotación automática de tokens de Google (Refresh Token) para evitar desconexiones manuales.
+- [x] **Experiencia Interactiva:**
+    - [x] Implementar **Micro-animaciones** (Hover effects, transiciones suaves al cargar datos, feedback visual).
+    - [x] Mejorar la estructura del layout (Grid system, espaciado consistente).
+- [x] **Visual Intelligence (Gráficos):**
+    - [x] Rediseñar gráficos existentes para que sean coherentes con la nueva identidad.
     - [ ] Implementar **Gráficos Superpuestos** (Comparativa de curvas A/B) con la nueva estética.
-    - [ ] **Heatmaps** estilizados para tiempos de publicación.
+    - [ ] Visualizar **Cluster de Audiencia** (Mapa de calor de horas activas).
 
 ### v1.5.0 - Smart Tracking & AI Accountability (Nueva Lógica)
 - [ ] **Plan de Acción Contextual:**
