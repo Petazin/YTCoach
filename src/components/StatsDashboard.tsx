@@ -9,6 +9,7 @@ import { generateAdvancedInsights, Insight, classifyContent } from '@/lib/insigh
 import AlgorithmicMatrix from './AlgorithmicMatrix';
 import ComparisonMode from './ComparisonMode';
 import styles from './StatsDashboard.module.css';
+import { Tabs, TabOption } from '@/components/ui/Tabs';
 
 interface Props {
     channel: ChannelData;
@@ -70,33 +71,17 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
                 <h2 className={styles.sectionTitle}>🎯 Estrategia & Insights (Beta)</h2>
 
                 {/* Tabs */}
-                <div className={styles.tabContainer}>
-                    <button
-                        className={`${styles.tab} ${activeTab === 'all' ? styles.activeTab : ''}`}
-                        onClick={() => setActiveTab('all')}
-                    >
-                        Todo
-                    </button>
-                    <button
-                        className={`${styles.tab} ${activeTab === 'video' ? styles.activeTab : ''}`}
-                        onClick={() => setActiveTab('video')}
-                    >
-                        Videos Largos
-                    </button>
-                    <button
-                        className={`${styles.tab} ${activeTab === 'short' ? styles.activeTab : ''}`}
-                        onClick={() => setActiveTab('short')}
-                    >
-                        Shorts
-                    </button>
-                    <button
-                        className={`${styles.tab} ${activeTab === 'versus' ? styles.activeTab : ''} ${styles.versusTab || ''}`} // Assuming you might add a specific style for versus tab, or just reuse tab
-                        onClick={() => setActiveTab('versus')}
-                        style={activeTab === 'versus' ? { borderColor: '#ff4d4d', color: '#ff4d4d' } : {}}
-                    >
-                        ⚔️ Versus Mode
-                    </button>
-                </div>
+                {/* Tabs */}
+                <Tabs
+                    value={activeTab}
+                    onChange={(val) => setActiveTab(val as any)}
+                    options={[
+                        { value: 'all', label: 'Todo' },
+                        { value: 'video', label: 'Videos Largos' },
+                        { value: 'short', label: 'Shorts' },
+                        { value: 'versus', label: '⚔️ Versus Mode' }
+                    ]}
+                />
 
                 {activeTab === 'versus' ? (
                     <ComparisonMode

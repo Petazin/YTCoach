@@ -104,19 +104,31 @@ async function fetchFromYouTube<T>(endpoint: string, params: Record<string, stri
 
 export async function getChannelDetails(identifier: string): Promise<ChannelData | null> {
   try {
+    // Decode if somehow strictly double encoded, but usually Next.js handles one level.
+    // If identifier is "%40..." manually, we might need decodeURIComponent. 
+    // Let's verify what we get.
+    console.log(`[getChannelDetails] Fetching for identifier: "${identifier}"`);
+
+    // Fix: Ensure we decode if it's still encoded (e.g. %40 instead of @)
+    const decodedIdentifier = decodeURIComponent(identifier);
+    console.log(`[getChannelDetails] Decoded: "${decodedIdentifier}"`);
+
     const params: Record<string, string> = {
       part: 'snippet,statistics,contentDetails',
     };
 
-    if (identifier.startsWith('@')) {
-      params.forHandle = identifier;
+    if (decodedIdentifier.startsWith('@')) {
+      params.forHandle = decodedIdentifier;
     } else {
-      params.id = identifier;
+      params.id = decodedIdentifier;
     }
+
+    console.log(`[getChannelDetails] API Params:`, JSON.stringify(params));
 
     const data = await fetchFromYouTube<{ items?: any[] }>('channels', params);
 
     if (!data.items || data.items.length === 0) {
+      console.warn(`[getChannelDetails] No items found for ${decodedIdentifier}`);
       return null;
     }
 

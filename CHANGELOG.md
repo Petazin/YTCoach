@@ -6,7 +6,8 @@
 - **Interactive Experience:** Micro-animaciones en tarjetas, efectos hover, y transiciones fluidas de entrada.
 - **Visual Intelligence:** Rediseño completo de la "Matriz de Decodificación Algorítmica" con estilos premium (gradientes, filas flotantes).
 - **Skeleton Loaders:** Estados de carga animados (`shimmer effect`) para el Dashboard público y privado.
-- **Component Library:** Estandarización de componentes UI (`Button`, `Card`, `Badge`) para consistencia global.
+- **Component Library:** Estandarización de componentes UI (`Button`, `Card`, `Badge`, `Input`, `Select`, `Tabs`) para consistencia global.
+- **Dynamic SEO:** Implementado enrutamiento dinámico `channel/[id]` con metadatos automáticos (Título, Descripción, OpenGraph) para cada canal.
 
 ### Changed
 - **Performance:** Optimización del layout principal usando CSS Canvas variables para espaciado y radii.

@@ -5,6 +5,11 @@
     position: relative;
 }
 
+/* Header modifier */
+.headerContext {
+    margin: 0;
+}
+
 .wrapper {
     position: relative;
     z-index: 1;
@@ -13,18 +18,8 @@
 
 .input {
     flex: 1;
-    padding: 1rem 1.5rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
     border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-    font-size: 1rem;
-    outline: none;
-    transition: border-color var(--transition-fast);
-}
-
-.input:focus {
-    border-color: var(--color-primary);
+    /* Remove generic styles now handled by Input component (padding, colors, etc.) */
 }
 
 .button {

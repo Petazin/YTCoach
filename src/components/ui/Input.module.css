@@ -1,0 +1,53 @@
+.input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.input::placeholder {
+    color: var(--color-text-dim);
+    opacity: 0.7;
+}
+
+.input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--color-primary), 0.1);
+}
+
+.input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-bg);
+}
+
+/* Sizes */
+.sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.md {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+.lg {
+    padding: 1rem 1.5rem;
+    font-size: 1.125rem;
+}
+
+/* Variants */
+.error {
+    border-color: var(--color-error);
+}
+
+.error:focus {
+    box-shadow: 0 0 0 2px rgba(var(--color-error), 0.1);
+}

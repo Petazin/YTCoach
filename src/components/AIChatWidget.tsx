@@ -4,6 +4,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { sendToAI, ChatMessage } from '@/lib/aiService';
 import styles from './AIChatWidget.module.css';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 
 interface Props {
     contextData: any; // The analytics context to pass to the AI
@@ -83,17 +85,18 @@ export default function AIChatWidget({ contextData }: Props) {
                         </div>
                         <div className="flex gap-2 items-center">
                             {/* Model Selector */}
-                            <select
+                            <Select
                                 value={selectedModel}
                                 onChange={(e) => setSelectedModel(e.target.value)}
-                                className="bg-gray-800 text-[10px] text-gray-300 border border-gray-600 rounded px-1 py-0.5 focus:outline-none"
+                                selectSize="xs"
+                                className="w-auto min-w-[140px] bg-gray-800"
                                 title="Seleccionar Modelo AI"
                             >
                                 <option value="gemini-1.5-flash">Flash 1.5 (Stable)</option>
                                 <option value="gemini-1.5-pro">Pro 1.5 (Intelligent)</option>
                                 <option value="gemini-2.0-flash-exp">Flash 2.0 (Experimental)</option>
                                 <option value="gemini-3-flash-preview">Flash 3.0 (Preview)</option>
-                            </select>
+                            </Select>
 
                             <button onClick={() => {
                                 const key = prompt("Ingresa tu Google Gemini API Key:", apiKey);
@@ -119,13 +122,15 @@ export default function AIChatWidget({ contextData }: Props) {
                     </div>
 
                     <div className={styles.inputArea}>
-                        <input
+                        <Input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                             placeholder="Pregunta sobre CTR, retención..."
                             disabled={loading}
+                            className="flex-1"
+                            inputSize="sm"
                         />
                         <button onClick={handleSend} disabled={loading || !input.trim()}>
                             ➤

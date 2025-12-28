@@ -72,3 +72,7 @@
     opacity: 1;
   }
 }
+
+.searchBarHeader {
+  margin: 0 !important;
+}

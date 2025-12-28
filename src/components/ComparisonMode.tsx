@@ -9,6 +9,7 @@ import styles from './ComparisonMode.module.css';
 import { generateExpertReport, ExpertReport } from '@/lib/expertAnalysis';
 
 // ... (imports)
+import { Input } from '@/components/ui/Input';
 
 // ...
 
@@ -232,7 +233,7 @@ export default function ComparisonMode({ videos, accessToken }: Props) {
     const getEngRate = (stats?: any) => {
         if (!stats) return '0';
         const views = parseInt(stats.viewCount || stats.views || '0');
-        if (views === 0) return 0;
+        if (views === 0) return '0';
         const likes = parseInt(stats.likeCount || stats.likes || '0');
         return ((likes / views) * 100).toFixed(2);
     };
@@ -378,10 +379,9 @@ export default function ComparisonMode({ videos, accessToken }: Props) {
                             <button className={styles.closeBtn} onClick={() => setIsSelecting(null)}>×</button>
                         </div>
                         <div className="p-4 border-b border-gray-700">
-                            <input
+                            <Input
                                 type="text"
                                 placeholder="🔍 Buscar por título..."
-                                className="w-full bg-black/30 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:border-red-500"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 autoFocus

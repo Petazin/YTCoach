@@ -10,6 +10,7 @@ Aplicación interactiva para optimizar canales de YouTube mediante análisis de 
 - **Segmentación:** Estrategias diferenciadas para Shorts, Videos y Lives.
 - **Visual Intelligence:** Gráficos rediseñados para una lectura instantánea de patrones algorítmicos.
 - **Diseño Premium v1.4:** Interfaz "Cyber-Dark" con micro-animaciones y tipografía optimizada (Outfit/Inter).
+- **SEO Dinámico:** Enrutamiento específico por canal (`/channel/[id]`) con metadatos OpenGraph para compartir.
 
 ## Requisitos
 - Node.js
