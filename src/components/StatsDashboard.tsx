@@ -10,6 +10,10 @@ import dynamic from 'next/dynamic'; // Lazy loading
 import styles from './StatsDashboard.module.css';
 import { Tabs, TabOption } from '@/components/ui/Tabs';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { ActionCard } from './ActionCard';
+import { TrackerTable } from './TrackerTable'; // [NEW]
+import { inspectAction } from '@/lib/inspector';
+import { useEffect } from 'react';
 
 const AlgorithmicMatrix = dynamic(() => import('./AlgorithmicMatrix'), {
     loading: () => <Skeleton height="400px" className="w-full rounded-xl" />,
@@ -28,7 +32,7 @@ interface Props {
 
 export default function StatsDashboard({ channel, analysis, videos }: Props) {
     const { data: session } = useSession();
-    const { trackAction, trackedActions, getImpact, isLoaded } = useTracker();
+    const { trackAction, untrackAction, trackedActions, getImpact, updateVerification, isLoaded } = useTracker();
     const [activeTab, setActiveTab] = useState<'all' | 'video' | 'short' | 'versus'>('all');
 
     const insights = useMemo(() => generateAdvancedInsights(videos), [videos]);
@@ -37,6 +41,25 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
         if (activeTab === 'all' || activeTab === 'versus') return insights;
         return insights.filter(i => i.contentType === activeTab);
     }, [insights, activeTab]);
+
+    // AI INSPECTOR: Run verification on mount/update
+    useEffect(() => {
+        if (!isLoaded || !videos) return;
+
+        trackedActions.forEach(action => {
+            // Only verify if pending and linked to a video
+            if (action.verificationStatus === 'pending' && action.videoId) {
+                const video = videos.find(v => v.id === action.videoId);
+                if (video) {
+                    const result = inspectAction(action, video);
+                    if (result.status !== 'pending') {
+                        console.log(`[Inspector] Action ${action.id} verified: ${result.status}`);
+                        updateVerification(action.id, result.status as 'verified' | 'failed');
+                    }
+                }
+            }
+        });
+    }, [isLoaded, trackedActions, videos, updateVerification]);
 
     const formatNumber = (num: string) => {
         return new Intl.NumberFormat('es-MX', { notation: 'compact' }).format(parseInt(num));
@@ -174,24 +197,20 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
                 <h2 className={styles.sectionTitle}>Plan de Acción</h2>
                 <div>
                     {analysis.actionPoints.map((ap) => {
+                        // Check if tracked generally or specifically.
+                        // For simplicity, if any action with this ID is tracked for this channel, show tracked.
+                        // (Future V2: Allow tracking multiple times for different videos)
                         const isTracked = trackedActions.some(t => t.id === ap.id && t.channelId === channel.id);
+
                         return (
-                            <div key={ap.id} className={styles.actionCard}>
-                                <div className={styles.actionContent}>
-                                    <span className={`${styles.badge} ${ap.priority === 'High' ? styles.badgeHigh : styles.badgeMedium}`}>
-                                        {ap.priority} Priority
-                                    </span>
-                                    <h4>{ap.title}</h4>
-                                    <p>{ap.description}</p>
-                                </div>
-                                <button
-                                    className={styles.trackBtn}
-                                    onClick={() => trackAction(ap.id, channel.id, ap.title, channel.statistics)}
-                                    disabled={isTracked}
-                                >
-                                    {isTracked ? '✓ En seguimiento' : 'Implementar'}
-                                </button>
-                            </div>
+                            <ActionCard
+                                key={ap.id}
+                                action={ap}
+                                videos={videos}
+                                channelId={channel.id}
+                                isTracked={isTracked}
+                                onTrack={(id, cid, title, vid, snapshot) => trackAction(id, cid, title, channel.statistics, vid, snapshot)}
+                            />
                         );
                     })}
                     {analysis.actionPoints.length === 0 && (
@@ -203,31 +222,13 @@ export default function StatsDashboard({ channel, analysis, videos }: Props) {
             {/* Tracker Section - Only show if there are tracked items for THIS channel */}
             {isLoaded && trackedActions.some(t => t.channelId === channel.id) && (
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>Seguimiento de Impacto</h2>
-                    <div className={styles.impactGrid}>
-                        {trackedActions.filter(t => t.channelId === channel.id).map(action => {
-                            const impact = getImpact(action.id, channel.statistics);
-                            return (
-                                <div key={action.id} className={styles.impactCard}>
-                                    <h4 className="font-bold text-white mb-2">{action.title}</h4>
-                                    <p className="text-xs text-gray-400">Implementado hace {impact?.daysSince} días</p>
-
-                                    {impact && (
-                                        <div className={styles.impactMetrics}>
-                                            <div className={styles.metric}>
-                                                <span className={styles.metricVal}>{impact.viewGrowth > 0 ? '+' : ''}{formatNumber(impact.viewGrowth.toString())}</span>
-                                                <span className={styles.metricLabel}>Vistas Nuevas</span>
-                                            </div>
-                                            <div className={styles.metric}>
-                                                <span className={styles.metricVal}>{impact.subGrowth > 0 ? '+' : ''}{impact.subGrowth}</span>
-                                                <span className={styles.metricLabel}>Subs Nuevos</span>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
+                    <h2 className={styles.sectionTitle}>📋 Tabla de Seguimiento & Auditoría</h2>
+                    <TrackerTable
+                        actions={trackedActions.filter(t => t.channelId === channel.id)}
+                        currentStats={channel.statistics}
+                        onUntrack={untrackAction}
+                        getImpact={getImpact}
+                    />
                 </div>
             )}
         </div>

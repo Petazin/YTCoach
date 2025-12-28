@@ -53,16 +53,16 @@ Este documento rastrea el progreso del proyecto, desde su concepción hasta los 
     - [ ] Implementar **Gráficos Superpuestos** (Comparativa de curvas A/B) con la nueva estética.
     - [ ] Visualizar **Cluster de Audiencia** (Mapa de calor de horas activas).
 
-### v1.5.0 - Smart Tracking & AI Accountability (Nueva Lógica)
-- [ ] **Plan de Acción Contextual:**
-    - [ ] Vincular el "Plan de Acción" a un **Video Específico** seleccionado (no solo global).
-    - [ ] Interfaz para crear, editar y marcar tareas asignadas a un ID de video concreto.
-- [ ] **Auditoría IA de Cambios (AI Inspector):**
-    - [ ] El Analista AI verifica automáticamente si los cambios realizados (ej. nuevo título) coinciden con el plan acordado.
-    - [ ] **Sistema de Alertas:** Notificar inconsistencias (ej. "Plan decía 'Título < 50 chars', Realidad: 70 chars").
-- [ ] **KPI de Impacto Agregado:**
-    - [ ] Calcular un **"Índice de Mejora"**: Diferencia de rendimiento (CTR, Vistas) antes vs después de aplicar el plan.
-    - [ ] Visualizar el ROI de las optimizaciones en el Dashboard general.
+### v1.5.0 - Smart Tracking & AI Accountability (Status: Completado)
+- [x] **Plan de Acción Contextual:**
+    - [x] Vincular el "Plan de Acción" a un **Video Específico** seleccionado (no solo global).
+    - [x] Interfaz para crear, editar y marcar tareas asignadas a un ID de video concreto (`ActionCard` + `VideoSelector`).
+- [x] **Auditoría IA de Cambios (AI Inspector):**
+    - [x] El Analista AI verifica automáticamente si los cambios realizados (ej. nuevo título) coinciden con el plan acordado.
+    - [x] **Sistema de Alertas:** Notificar inconsistencias (Verificación Automática ✅/❌).
+- [x] **KPI de Impacto Agregado:**
+    - [x] Calcular un **"Índice de Mejora"**: Diferencia de rendimiento (Vistas, Subs) antes vs después.
+    - [x] Visualizar el ROI de las optimizaciones en una Tabla detallada.
 
 ### v1.6.0 - Multi-Channel & SEO Intelligence
 - [ ] **Sugerencias de Títulos y Hashtags (SEO IA):**

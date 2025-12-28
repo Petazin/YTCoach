@@ -13,6 +13,7 @@ export interface ActionPoint {
     description: string;
     priority: 'High' | 'Medium' | 'Low';
     category: 'SEO' | 'Content' | 'Engagement';
+    videoId?: string; // [NEW] Suggested video context
 }
 
 function calculateEngagement(likes: string, comments: string, views: string): number {

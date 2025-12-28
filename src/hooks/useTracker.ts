@@ -4,6 +4,15 @@ import { ChannelStatistics } from '@/lib/youtube';
 export interface TrackedAction {
     id: string;
     channelId: string;
+    videoId?: string;
+    videoTitle?: string;
+    videoSnapshot?: {
+        title: string;
+        tagsCount: number;
+        descriptionLength: number;
+    };
+    verificationStatus: 'pending' | 'verified' | 'failed';
+    lastVerifiedAt?: number;
     title: string;
     implementedAt: number;
     initialStats: ChannelStatistics;
@@ -32,19 +41,39 @@ export function useTracker() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(actions));
     };
 
-    const trackAction = (id: string, channelId: string, title: string, currentStats: ChannelStatistics) => {
-        // Avoid duplicates
-        if (trackedActions.find(a => a.id === id)) return;
+    const trackAction = (
+        id: string,
+        channelId: string,
+        title: string,
+        currentStats: ChannelStatistics,
+        videoId?: string,
+        videoSnapshot?: { title: string, tagsCount: number, descriptionLength: number }
+    ) => {
+        // Avoid duplicates (allow same action if different video)
+        if (trackedActions.find(a => a.id === id && a.videoId === videoId)) return;
 
         const newAction: TrackedAction = {
             id,
             channelId,
+            videoId,
+            videoTitle: videoSnapshot?.title,
+            videoSnapshot,
+            verificationStatus: 'pending',
             title,
             implementedAt: Date.now(),
             initialStats: { ...currentStats } // Snapshot
         };
 
         saveActions([...trackedActions, newAction]);
+    };
+
+    const updateVerification = (actionId: string, status: 'verified' | 'failed') => {
+        const updated = trackedActions.map(a =>
+            a.id === actionId
+                ? { ...a, verificationStatus: status, lastVerifiedAt: Date.now() }
+                : a
+        );
+        saveActions(updated);
     };
 
     const untrackAction = (id: string) => {
@@ -72,6 +101,7 @@ export function useTracker() {
         trackAction,
         untrackAction,
         getImpact,
+        updateVerification, // [NEW]
         isLoaded
     };
 }

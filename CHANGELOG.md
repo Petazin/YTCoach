@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0] - 2025-12-27
+### Added
+- **Smart Tracking:** Sistema de "Planes de Acción Contextuales". Ahora puedes vincular una sugerencia de la IA a un video específico.
+- **AI Inspector:** Módulo que verifica automáticamente si los cambios realizados (ej. largo del título) coinciden con el plan.
+- **TrackerTable:** Nueva vista estructurada en tabla para gestionar tus estrategias de optimización, ver impacto y estado de verificación.
+- **Impact KPIs:** Cálculos de crecimiento (Vistas, Subs) específicos para cada acción implementada.
+
 ## [1.4.0] - 2025-12-24
 ### Added
 - **Design System v1.4:** Nueva identidad visual "Cyber-Dark" con paleta de colores HSL dinámica y tipografía modernizada (Outfit + Inter).
