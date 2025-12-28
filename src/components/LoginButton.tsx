@@ -3,6 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import styles from './LoginButton.module.css';
 import { Button } from "@/components/ui/Button";
+import { useEffect } from "react"; // [NEW]
 
 // Google Icon Component
 const GoogleIcon = () => (
@@ -18,6 +19,13 @@ const GoogleIcon = () => (
 
 export default function LoginButton() {
     const { data: session } = useSession();
+
+    // Force sign in if refresh token failed
+    useEffect(() => {
+        if ((session as any)?.error === "RefreshAccessTokenError") {
+            signIn("google", { prompt: "consent" }); // Force re-login with consent to get new refresh token
+        }
+    }, [session]);
 
     if (session) {
         return (

@@ -1,9 +1,11 @@
-// 'use client' is still needed for useSession maybe? Or we can make it Server Component if we extract Login?
-// Let's keep it client for now for simplicity of LoginButton interaction but remove the heavy states.
 'use client';
 
+// 'use client' is still needed for useSession maybe? Or we can make it Server Component if we extract Login?
+// Let's keep it client for now for simplicity of LoginButton interaction but remove the heavy states.
+import { useState } from 'react';
 import SearchBar from '@/components/SearchBar';
 import LoginButton from '@/components/LoginButton';
+import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './page.module.css';
 
 export default function Home() {

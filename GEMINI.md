@@ -5,7 +5,7 @@ Aplicación web interactiva para analizar estadísticas de canales de YouTube, i
 
 ## Estado Actual
 - **Versión:** 1.4.0 (Design System & Dynamic SEO)
-- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto, Dashboard Privado, Matriz de Algortimo (UI v1.4), **Analista AI Conversacional (Versus Mode)**, **Sistema de Diseño v1.4 (Cyber-Dark UI, Componentes Reutilizables)**, **SEO Dinámico**.
+- **Funcionalidades:** Búsqueda por ID/Handle, Análisis de tendencias, Generador de consejos, Tracker de impacto, Dashboard Privado, Matriz de Algortimo (UI v1.4), **Analista AI Conversacional (Versus Mode)**, **Sistema de Diseño v1.4**, **SEO Dinámico**, **Lazy Loading**, **Rotación Auto de Tokens**.
 
 ## Reglas del Usuario (Memoria)
 - Comunicación en español.

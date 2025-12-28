@@ -6,10 +6,19 @@ import { ChannelData, VideoData } from '@/lib/youtube';
 import { AnalysisResult } from '@/lib/analysis';
 import { useTracker } from '@/hooks/useTracker';
 import { generateAdvancedInsights, Insight, classifyContent } from '@/lib/insightEngine'; // Import engine
-import AlgorithmicMatrix from './AlgorithmicMatrix';
-import ComparisonMode from './ComparisonMode';
+import dynamic from 'next/dynamic'; // Lazy loading
 import styles from './StatsDashboard.module.css';
 import { Tabs, TabOption } from '@/components/ui/Tabs';
+import { Skeleton } from '@/components/ui/Skeleton';
+
+const AlgorithmicMatrix = dynamic(() => import('./AlgorithmicMatrix'), {
+    loading: () => <Skeleton height="400px" className="w-full rounded-xl" />,
+    ssr: false // Optional: if it depends heavily on window/client specific logic
+});
+
+const ComparisonMode = dynamic(() => import('./ComparisonMode'), {
+    loading: () => <Skeleton height="500px" className="w-full rounded-xl bg-gray-900" />,
+});
 
 interface Props {
     channel: ChannelData;

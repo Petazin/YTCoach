@@ -8,6 +8,8 @@
 - **Skeleton Loaders:** Estados de carga animados (`shimmer effect`) para el Dashboard público y privado.
 - **Component Library:** Estandarización de componentes UI (`Button`, `Card`, `Badge`, `Input`, `Select`, `Tabs`) para consistencia global.
 - **Dynamic SEO:** Implementado enrutamiento dinámico `channel/[id]` con metadatos automáticos (Título, Descripción, OpenGraph) para cada canal.
+- **Performance:** Lazy Loading implementado para componentes pesados (`AlgorithmicMatrix`, `ComparisonMode`) usando `next/dynamic` y Skeletons reutilizables.
+- **Auth:** Implementada **Rotación de Tokens** automática (Refresh Tokens) para mantener sesiones activas indefinidamente sin desconexión de API.
 
 ### Changed
 - **Performance:** Optimización del layout principal usando CSS Canvas variables para espaciado y radii.
